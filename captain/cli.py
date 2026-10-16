@@ -68,6 +68,14 @@ def main():
         parser.error("No Piper voice configured. Run setup --piper-model PATH after selecting a voice.")
     speaker = Speaker(config.piper_model)
     controller = Controller(config, root, emit=speaker.say, silence=speaker.silence)
+    def preload():
+        try:
+            controller.model.warmup()
+        except Exception as exc:
+            print(f"Captain: Model preload failed: {exc}", flush=True)
+
+    import threading
+    threading.Thread(target=preload, daemon=True).start()
     pending_name = None
 
     def receive(text):
