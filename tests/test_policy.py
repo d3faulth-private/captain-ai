@@ -22,7 +22,7 @@ class PolicyTests(unittest.TestCase):
         for path in ['../escape.txt', '/etc/passwd', '.']:
             with self.assertRaises(PolicyError):
                 self.policy.path(path)
-        self.assertEqual(self.policy.path('report.txt').parent, Path(self.temp.name))
+        self.assertEqual(self.policy.path('report.txt').parent, Path(self.temp.name).resolve())
 
     def test_symlink_escape(self):
         with tempfile.TemporaryDirectory() as outside:
